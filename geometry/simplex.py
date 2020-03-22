@@ -1,42 +1,43 @@
+from collections import namedtuple
+
 import numpy as np
 
 # TODO: raise an error in branch_on if the point is outside the simplex?
 # otherwise you can get a double-covering
 # TODO: new methods find_center??
-# TODO: Make a namedtuple FunctionPoint which takes (point, value), 
-# then re-do this in terms of that. It will make testing easier
+
+
+FunctionPoint = namedtuple("FunctionPoint", ('point', 'value'))
 
 
 class Simplex(object):
-    def __init__(self, evaluated_points, function_values):
-        self.evaluated_points = np.asarray(evaluated_points)
-        self.function_values = np.asarray(function_values)
-        self.dimension = self.evaluated_points.shape[1]
+    def __init__(self, function_points):
+        self.function_points = tuple(function_points)
+        self.dimension = np.size(self.function_points[0].point)
         self._check_inputs()
 
-    def branch_on(self, new_point, new_value):
+    def branch_on(self, new_function_point):
         simplices = []
-        for exclude_index in range(self.evaluated_points.shape[0]):
-            these_points = np.vstack([
-                self.evaluated_points[:exclude_index],
-                self.evaluated_points[exclude_index + 1:],
-                [new_point]])
-            these_values = np.hstack([
-                self.function_values[:exclude_index],
-                self.function_values[exclude_index + 1:],
-                new_value])
-            simplices.append(self.__class__(these_points, these_values))
+        for exclude_index in range(len(self.function_points)):
+            these_function_points = (
+                self.function_points[:exclude_index] +
+                self.function_points[exclude_index + 1:] +
+                (new_function_point,))
+            simplices.append(self.__class__(these_function_points))
         return simplices
 
     def _check_inputs(self):
-        if len(self.evaluated_points) != len(self.function_values):
-            msg = "len(evaluated_points) must equal len(function_values)"
+        if not all([np.size(fp.value) == 1 for fp in self.function_points]):
+            msg = "Each function values must be a scalar"
             raise ValueError(msg)
-        if not all([np.size(v) == 1 for v in self.function_values]):
-            msg = "Function values must be of shape (d+1,)"
-            raise ValueError(msg)
-        if self.evaluated_points.shape[0] != self.dimension + 1:
+        if len(self.function_points) != self.dimension + 1:
             msg = "Evaluated points must be of shape (d+1, d)"
+            raise ValueError(msg)
+        all_same_dimension = all([
+            np.size(fp.point) == self.dimension
+            for fp in self.function_points])
+        if not all_same_dimension:
+            msg = "All poits must be same dimension"
             raise ValueError(msg)
 
 
