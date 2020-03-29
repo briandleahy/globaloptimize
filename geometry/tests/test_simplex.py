@@ -48,26 +48,28 @@ class TestSimplex(unittest.TestCase):
         simplex = Simplex(function_points)
         self.assertEqual(simplex.dimension, n_dim)
 
-    def test_branch_simplex_returns_corect_number_of_simplices(self):
+    def test_simplex_branch_on_interior_point_returns_correct_number(self):
         np.random.seed(1104)
         dimension = 3
         simplex = make_simplex(dimension)
         new_point = np.random.standard_normal((dimension,))
         new_value = np.random.standard_normal((1,))
         new_function_point = FunctionPoint(new_point, new_value)
-        branched_simplices = simplex.branch_on(new_function_point)
+        branched_simplices = simplex.branch_on_interior_point(
+            new_function_point)
         self.assertEqual(len(branched_simplices), dimension + 1)
         for branched_simplex in branched_simplices:
             self.assertIsInstance(branched_simplex, Simplex)
 
-    def test_branch_simplex_keeps_at_least_d_old_simplices(self):
+    def test_simplex_branch_on_interior_point_keeps_d_old_simplices(self):
         np.random.seed(1104)
         dimension = 3
         simplex = make_simplex(dimension)
         new_point = np.random.standard_normal((dimension,))
         new_value = np.random.standard_normal((1,))
         new_function_point = FunctionPoint(new_point, new_value)
-        branched_simplices = simplex.branch_on(new_function_point)
+        branched_simplices = simplex.branch_on_interior_point(
+            new_function_point)
 
         old_function_points = simplex.function_points
         for branched_simplex in branched_simplices:

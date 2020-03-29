@@ -16,7 +16,7 @@ class Simplex(object):
         self.dimension = np.size(self.function_points[0].point)
         self._check_inputs()
 
-    def branch_on(self, new_function_point):
+    def branch_on_interior_point(self, new_function_point):
         simplices = []
         for exclude_index in range(len(self.function_points)):
             these_function_points = (
