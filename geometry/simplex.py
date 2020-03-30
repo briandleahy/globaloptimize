@@ -8,6 +8,7 @@ import numpy as np
 
 
 FunctionPoint = namedtuple("FunctionPoint", ('point', 'value'))
+# TODO: attr of is_local_minimum?
 
 
 class Simplex(object):
@@ -40,6 +41,15 @@ class Simplex(object):
             msg = "All poits must be same dimension"
             raise ValueError(msg)
 
+    @property
+    def max_function_point(self):
+        index = np.argmax([fp.value for fp in self.function_points])
+        return self.function_points[index]
+
+    @property
+    def min_function_point(self):
+        index = np.argmin([fp.value for fp in self.function_points])
+        return self.function_points[index]
 
 
 
