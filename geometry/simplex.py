@@ -42,12 +42,12 @@ class Simplex(object):
             raise ValueError(msg)
 
     @property
-    def max_function_point(self):
+    def vertex_with_max_value(self):
         index = np.argmax([fp.value for fp in self.function_points])
         return self.function_points[index]
 
     @property
-    def min_function_point(self):
+    def vertex_with_min_value(self):
         index = np.argmin([fp.value for fp in self.function_points])
         return self.function_points[index]
 

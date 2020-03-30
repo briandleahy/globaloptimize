@@ -80,24 +80,24 @@ class TestSimplex(unittest.TestCase):
                     count += 1
             self.assertEqual(count, dimension)
 
-    def test_max_function_point(self):
+    def test_vertex_with_max_value(self):
         n_dim = 3
         points = np.random.standard_normal((n_dim + 1, n_dim))
         values = np.random.standard_normal(points.shape[:1])
         function_points = make_function_points(points, values)
         simplex = Simplex(function_points)
 
-        max_function_point = simplex.max_function_point
+        max_function_point = simplex.vertex_with_max_value
         self.assertEqual(max_function_point.value, values.max())
 
-    def test_min_function_point(self):
+    def test_vertex_with_min_value(self):
         n_dim = 3
         points = np.random.standard_normal((n_dim + 1, n_dim))
         values = np.random.standard_normal(points.shape[:1])
         function_points = make_function_points(points, values)
         simplex = Simplex(function_points)
 
-        min_function_point = simplex.min_function_point
+        min_function_point = simplex.vertex_with_min_value
         self.assertEqual(min_function_point.value, values.min())
 
 
