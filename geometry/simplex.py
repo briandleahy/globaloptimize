@@ -2,13 +2,28 @@ from collections import namedtuple
 
 import numpy as np
 
-# TODO: raise an error in branch_on if the point is outside the simplex?
-# otherwise you can get a double-covering
-# TODO: new methods find_center??
 
+"""
+FunctionPoint = namedtuple(
+    "FunctionPoint",
+    ('point', 'value', 'is_local_minimum'),
+    defaults=(False,))  # defaults is not added until 3.7
+"""
+class FunctionPoint(object):
+    def __init__(self, point, value, is_local_minimum=False):
+        self._tuple = (point, value, is_local_minimum)
 
-FunctionPoint = namedtuple("FunctionPoint", ('point', 'value'))
-# TODO: attr of is_local_minimum?
+    @property
+    def point(self):
+        return self._tuple[0]
+
+    @property
+    def value(self):
+        return self._tuple[1]
+
+    @property
+    def is_local_minimum(self):
+        return self._tuple[2]
 
 
 class Simplex(object):

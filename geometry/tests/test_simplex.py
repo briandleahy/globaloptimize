@@ -13,6 +13,25 @@ class TestFunctionPoint(unittest.TestCase):
         self.assertEqual(function_point.value, value)
         self.assertTrue(np.all(function_point.point == point))
 
+    def test_eq_when_same(self):
+        point = np.ones(4)
+        value = 3.5
+        function_point = FunctionPoint(point, value)
+        self.assertEqual(function_point, function_point)
+
+    def test_eq_when_different(self):
+        function_point1 = FunctionPoint(np.ones(4), 3.5)
+        function_point2 = FunctionPoint(np.ones(4) * 2, 1.5)
+        self.assertNotEqual(function_point1, function_point2)
+
+    def test_is_local_minimum_default_to_false(self):
+        function_point = FunctionPoint(np.ones(4), 3.5)
+        self.assertFalse(function_point.is_local_minimum)
+
+    def test_is_local_minimum_stores_when_set_to_true(self):
+        function_point = FunctionPoint(np.ones(4), 3.5, is_local_minimum=True)
+        self.assertTrue(function_point.is_local_minimum)
+
 
 class TestSimplex(unittest.TestCase):
     def test_raises_error_if_points_not_all_same_dimension(self):
