@@ -21,6 +21,25 @@ class TestBoundCalculator(unittest.TestCase):
         self.assertRaises(ValueError, bounder.bound, function_point)
 
 
+class MaxPointSimplexBoundCalculator(unittest.TestCase):
+    def test_bounds_correctly(self):
+        np.random.seed(1459)
+        point_bounder = bound.OrdinaryPointBoundCalculator(*np.random.randn(2))
+        simplex_bounder = bound.MaxPointSimplexBoundCalculator(point_bounder)
+
+        simplex = make_simplex(dimension=10)
+
+        result = simplex_bounder.bound(simplex)
+
+        index = np.argmax([fp.value for fp in simplex.function_points])
+        vertex_max_f = simplex.function_points[index].value
+        max_dist_from_vertex = max([
+            np.linalg.norm(fp.point - simplex.function_points[index].point)
+            for fp in simplex.function_points])
+        correct = vertex_max_f - point_bounder.bound(max_dist_from_vertex)
+        self.assertAlmostEqual(result, correct, places=13)
+
+
 class TestPointBoundCalculator(unittest.TestCase):
     def test_bound_raises_notimplementederror(self):
         bounder = bound.PointBoundCalculator()

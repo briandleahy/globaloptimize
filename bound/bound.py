@@ -1,11 +1,7 @@
+import numpy as np
+
 from globaloptimization.geometry.simplex import Simplex
 
-
-
-# Code to calculate bounds given a simplex.
-# There are a few ways to do this.
-#       - Multiple ways to bound f(x) given a value at a point
-#       - multiple ways to combine these
 
 """
  Bounds are:
@@ -13,7 +9,6 @@ from globaloptimization.geometry.simplex import Simplex
         that max value - h(delta), where delta = length of longest side.
     2.  Let delta = radius of circumscribing d-sphere. Then pick the bound
         as min(f on vertices) - h(delta)
-
 
 For each of these, we can use h(delta) as:
     a. h = Lipshitz on function only
@@ -31,9 +26,12 @@ local minimum, and we have Lipshitz contraints on:
     - d^4 f / dx^4      (i.e. 5th derivative is bounded)
 
 I imagine that, in the end, only one of these will be useful.
-
 """
 
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                         Bounds for simplices
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class SimplexBoundCalculator(object):
     def bound(self, simplex):
@@ -45,14 +43,34 @@ class SimplexBoundCalculator(object):
         raise NotImplementedError("Implement in subclass")
 
 
+class MaxPointSimplexBoundCalculator(SimplexBoundCalculator):
+    """Bound as max(f) - h(max distance from argmax(f))"""
+
+    def __init__(self, point_bound_calculator):
+        self.point_bound_calculator = point_bound_calculator
+
+    def _bound(self, simplex):
+        max_vertex = simplex.vertex_with_max_value
+        point = max_vertex.point
+        max_distance = max([
+            np.linalg.norm(point - fp.point)
+            for fp in simplex.function_points])
+        max_difference = self.point_bound_calculator.bound(max_distance)
+        return max_vertex.value - max_difference
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                 Bounds for distances from a point
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 class PointBoundCalculator(object):
     def bound(self, distance):
         raise NotImplementedError("Implement in subclass")
 
 
 class OrdinaryPointBoundCalculator(PointBoundCalculator):
-    """Calculate bounds on f given for distances from ordinary points,
-    as opposed to points which are a local minimum."""
+    """Calculate bounds on f given for distances from points
+    which are not assumed to be local minima."""
 
     def __init__(self, f_lipshitz_constant, df1_dx1_lipshitz_constant):
         # TODO default to inf?
