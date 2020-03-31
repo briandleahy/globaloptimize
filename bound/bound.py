@@ -4,28 +4,12 @@ from globaloptimization.geometry.simplex import Simplex
 
 
 """
- Bounds are:
-    1.  Pick simplex vertex with the largest function value. Bound using
-        that max value - h(delta), where delta = length of longest side.
-    2.  Let delta = radius of circumscribing d-sphere. Then pick the bound
-        as min(f on vertices) - h(delta)
-
-For each of these, we can use h(delta) as:
-    a. h = Lipshitz on function only
-    b. h = Lipshitz on function gradient only
-    c. h = Lipshitz on both function and its gradient
-We capture all of these by just implementing case (c); case (a) and (b)
-can be captured from (c) by setting a bound of np.inf as one of the
-lipshitz constants
-
-Finally, there are tigher bounds when we know that a certain point is a
+There are also tigher bounds when we know that a certain point is a
 local minimum, and we have Lipshitz contraints on:
     - df / dx           (i.e. 2nd derivative is bounded)
     - d^2 f / dx^2      (i.3. 3rd derivative is bounded)
     - d^3 f / dx^3      (i.e. 4th derivative is bounded)
     - d^4 f / dx^4      (i.e. 5th derivative is bounded)
-
-I imagine that, in the end, only one of these will be useful.
 """
 
 
@@ -58,6 +42,12 @@ class MaxPointSimplexBoundCalculator(SimplexBoundCalculator):
         max_difference = self.point_bound_calculator.bound(max_distance)
         return max_vertex.value - max_difference
 
+
+# TODO other bounding options:
+# 1. min(f) - h(radius of circumscribing sphere)
+# 2. min(f) - h(max (dist from simplex center to all vertices))
+# The first one should be the tightest bound, but it will take a little
+# longer to compute when there are many variables.
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                 Bounds for distances from a point
