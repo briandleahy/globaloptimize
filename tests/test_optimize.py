@@ -249,7 +249,6 @@ class TestBranchBoundOptimizerOptimize(unittest.TestCase):
         self.assertLessEqual(result.value, global_min + ftol)
 
 
-
 class FunctionCallCounter(object):
     def __init__(self, function):
         self.function = function
@@ -305,7 +304,6 @@ def make_simplex_bound_calculator(
 
 def square_distance_from_center(p):
     return np.linalg.norm(p)**2
-
 
 
 if __name__ == '__main__':

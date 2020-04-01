@@ -77,7 +77,6 @@ class BranchBoundOptimizer(object):
         heap = Heap.create_from_iterable(heap_entries)
         return heap
 
-
     def _get_min_function_point(self, initial_simplices):
         min_vertices = [s.vertex_with_min_value for s in initial_simplices]
         min_values = [v.value for v in min_vertices]

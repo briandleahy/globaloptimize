@@ -3,6 +3,11 @@ from collections import namedtuple
 import numpy as np
 
 
+# TODO: Some premature optimizations that are the root of all evil:
+# lazily precompute simplex.min, simplex.max
+# hashable FunctionPoints
+
+
 """
 FunctionPoint = namedtuple(
     "FunctionPoint",

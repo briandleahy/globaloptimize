@@ -135,10 +135,8 @@ class TestOrdinaryPointBoundCalculatorBound(unittest.TestCase):
             )
         dx = 1
         bounds = bounder.bound(dx)
-        correct =  0.5 * df1_dx1_lipshitz_constant * dx**2
+        correct = 0.5 * df1_dx1_lipshitz_constant * dx**2
         self.assertAlmostEqual(bounds, correct, places=13)
-
-
 
 
 if __name__ == '__main__':
