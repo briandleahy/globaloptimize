@@ -73,7 +73,7 @@ class TestBranchBoundOptimizerBasicMethods(unittest.TestCase):
             simplex_bound_calculator)
         self.assertIsInstance(optimizer._heap, Heap)
 
-    def test_init_sets_current_min_value(self):
+    def test_init_sets_current_min_function_point(self):
         np.random.seed(1045)
         initial_simplices = [make_simplex() for _ in range(10)]
         simplex_bound_calculator = make_simplex_bound_calculator()
@@ -86,7 +86,7 @@ class TestBranchBoundOptimizerBasicMethods(unittest.TestCase):
             simplex.vertex_with_min_value.value
             for simplex in initial_simplices]
         true_min_found = min(function_values)
-        stored_min_found = optimizer.current_min_value
+        stored_min_found = optimizer.current_min_function_point.value
 
         self.assertEqual(true_min_found, stored_min_found)
 
@@ -104,12 +104,12 @@ class TestBranchBoundOptimizerBasicMethods(unittest.TestCase):
             initial_simplices,
             simplex_bound_calculator)
 
-        assert optimizer.current_min_value > 0
+        assert optimizer.current_min_function_point.value > 0
         global_min_x = np.zeros(ndim)
         global_min_fp = optimizer._evaluate_function_point(global_min_x)
         assert global_min_fp.value == 0
 
-        self.assertEqual(optimizer.current_min_value, 0)
+        self.assertEqual(optimizer.current_min_function_point.value, 0)
 
     def test_branch_on_candidate_returns_2_simplices(self):
         np.random.seed(1053)
@@ -218,10 +218,36 @@ class TestBranchBoundOptimizerOptimize(unittest.TestCase):
         global_min = 0.0
 
         ftol = 0.01
-        assert (optimizer.current_min_value > ftol)
+        assert (optimizer.current_min_function_point.value > ftol)
         optimizer.optimize(ftol=ftol, max_function_evaluations=200)
 
-        self.assertLessEqual(optimizer.current_min_value, ftol)
+        self.assertLessEqual(optimizer.current_min_function_point.value, ftol)
+
+    def test_optimize_returns_correct_dtype_when_did_not_converge(self):
+        np.random.seed(1652)
+        optimizer = make_realistic_optimizer_with_function_call_counter(2)
+        out = optimizer.optimize(ftol=0, max_function_evaluations=1)
+
+        self.assertIsInstance(out, FunctionPoint)
+
+    def test_optimize_returns_correct_dtype_when_did_converge(self):
+        np.random.seed(1652)
+        optimizer = make_realistic_optimizer_with_function_call_counter(2)
+        maxfev = 30
+        out = optimizer.optimize(ftol=0.1, max_function_evaluations=maxfev)
+        assert optimizer.objective_function.counter < maxfev
+        self.assertIsInstance(out, FunctionPoint)
+
+    def test_optimize_returns_best_point(self):
+        np.random.seed(1652)
+        optimizer = make_realistic_optimizer_with_function_call_counter(2)
+        global_min = 0.0
+
+        ftol = 0.01
+        result = optimizer.optimize(ftol=ftol, max_function_evaluations=200)
+
+        self.assertLessEqual(result.value, global_min + ftol)
+
 
 
 class FunctionCallCounter(object):

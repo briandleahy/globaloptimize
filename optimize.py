@@ -10,26 +10,29 @@ from globaloptimization.geometry.simplex import Simplex, FunctionPoint
 # vertex. For different bouning methods, it might make sense to do the
 # longest edge from the min vertex (e.g. for min-F0-based-bounds).
 
+# TODO: Return a more detailed return type with whether the optimization
+# succeeded.
+
 
 class BranchBoundOptimizer(object):
     def __init__(self, objective_function, initial_simplices, simplex_bounder):
         self.objective_function = objective_function
         self.simplex_bounder = simplex_bounder
         self._heap = self._setup_heap(initial_simplices)
-        self.current_min_value = min(
-            [s.vertex_with_min_value.value for s in initial_simplices])
+        self.current_min_function_point = self._get_min_function_point(
+            initial_simplices)
 
     def optimize(self, max_function_evaluations=1000, ftol=1e-5):
-        # What does this return???
-        # I think this returns the best FunctionPoint
         for _ in range(max_function_evaluations):
             candidate = self._heap.pop_min()
-            if candidate.value > self.current_min_value - ftol:
+            if candidate.value > self.current_min_function_point.value - ftol:
                 # add candidate back to heap, so we can re-start easily.
                 self._heap.add_to_heap(candidate)
-                return
+                return self.current_min_function_point
             else:
                 self.process_candidate(candidate)
+        # We hit max iterations:
+        return self.current_min_function_point
 
     def process_candidate(self, candidate):
         simplex = candidate.object
@@ -63,8 +66,8 @@ class BranchBoundOptimizer(object):
     def _evaluate_function_point(self, point):
         value = self.objective_function(point)
         function_point = FunctionPoint(point, value)
-        if value < self.current_min_value:
-            self.current_min_value = value
+        if value < self.current_min_function_point.value:
+            self.current_min_function_point = function_point
         return function_point
 
     def _setup_heap(self, simplices):
@@ -73,4 +76,11 @@ class BranchBoundOptimizer(object):
             for simplex in simplices]
         heap = Heap.create_from_iterable(heap_entries)
         return heap
+
+
+    def _get_min_function_point(self, initial_simplices):
+        min_vertices = [s.vertex_with_min_value for s in initial_simplices]
+        min_values = [v.value for v in min_vertices]
+        index = np.argmin(min_values)
+        return min_vertices[index]
 
