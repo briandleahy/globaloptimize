@@ -4,9 +4,9 @@ from collections import deque
 class Heap(object):
     # FIXME add a docstring!
 
-    def __init__(self, value):
+    def __init__(self, value=None):
         self.value = value
-        self.num_in_heap = 1
+        self.num_in_heap = 0 if value is None else 1
         self.left_child = None
         self.right_child = None
 
@@ -20,7 +20,9 @@ class Heap(object):
         return heap
 
     def add_to_heap(self, value):
-        if value < self.value:
+        if self.value is None:
+            self.value = value
+        elif value < self.value:
             self._bubble_down(self.value)
             self.value = value
         else:

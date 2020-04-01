@@ -5,8 +5,12 @@ from globaloptimization.util.heap import Heap, EmptyHeapError, heapsort
 
 
 class TestHeap(unittest.TestCase):
-    def test_initializes_to_zero_num_in_heap(self):
-        heap = Heap(None)
+    def test_initializes_to_zero_num_in_heap_when_empty(self):
+        heap = Heap()
+        self.assertEqual(heap.num_in_heap, 0)
+
+    def test_initializes_num_in_heap_to_1_when_not_empty(self):
+        heap = Heap(2)
         self.assertEqual(heap.num_in_heap, 1)
 
     def test_initializes_child_heaps_to_none(self):
@@ -100,6 +104,14 @@ class TestHeap(unittest.TestCase):
         heap = Heap(1)
         _ = heap.pop_min()  # heap is now empty
         self.assertRaises(EmptyHeapError, heap.pop_min)
+
+    def test_adding_after_pop_min_on_last_element(self):
+        heap = Heap(1)
+        _ = heap.pop_min()  # heap is now empty
+        assert len(heap) == 0
+
+        heap.add_to_heap(2)
+        self.assertEqual(len(heap), 1)
 
 
 class TestHeapsort(unittest.TestCase):
