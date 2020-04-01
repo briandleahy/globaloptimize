@@ -32,6 +32,13 @@ class TestFunctionPoint(unittest.TestCase):
         function_point = FunctionPoint(np.ones(4), 3.5, is_local_minimum=True)
         self.assertTrue(function_point.is_local_minimum)
 
+    def test_repr(self):
+        function_point = FunctionPoint(np.ones(4), 3.5, is_local_minimum=True)
+        the_repr = repr(function_point)
+        self.assertIn('FunctionPoint', the_repr)
+        self.assertIn('1', the_repr)
+        self.assertIn(', 3.5)', the_repr)
+
 
 class TestSimplex(unittest.TestCase):
     def test_raises_error_if_points_not_all_same_dimension(self):

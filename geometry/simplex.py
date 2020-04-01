@@ -25,9 +25,32 @@ class FunctionPoint(object):
     def is_local_minimum(self):
         return self._tuple[2]
 
+    def __repr__(self):
+        return "FunctionPoint({}, {})".format(self.point, self.value)
+
 
 class Simplex(object):
+    """
+    Stores information about a function on the vertices of a simplex
+    (d-dimensional analogue of a triangle).
+
+    Attributes
+    ----------
+    dimension : int
+    function_points : tuple of FunctionPoints
+    vertex_with_max_value : FunctionPoint
+    vertex_with_max_value : FunctionPoint
+
+    Methods
+    -------
+    branch_on_interior_point(FunctinoPoint) -> list of d simplices
+    """
     def __init__(self, function_points):
+        """
+        Parameters
+        ----------
+        function_points : list-like of FunctionPoint objects
+        """
         self.function_points = tuple(function_points)
         self.dimension = np.size(self.function_points[0].point)
         self._check_inputs()
@@ -65,6 +88,4 @@ class Simplex(object):
     def vertex_with_min_value(self):
         index = np.argmin([fp.value for fp in self.function_points])
         return self.function_points[index]
-
-
 
