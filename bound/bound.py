@@ -1,5 +1,3 @@
-import warnings
-
 import numpy as np
 
 from globaloptimization.geometry.simplex import Simplex
@@ -23,13 +21,7 @@ class SimplexBoundCalculator(object):
     def bound(self, simplex):
         if not isinstance(simplex, Simplex):
             raise ValueError("simplex must be a Simplex instance")
-        lower_bound = self._bound(simplex)
-        min_simplex_value = simplex.vertex_with_min_value.value
-        if lower_bound > min_simplex_value:
-            msg = ('lower bound of {:0.4f} less than min'.format(lower_bound) +
-                   ' value on simplex of {:0.4f}.'.format(min_simplex_value))
-            warnings.warn(msg, category=InconsistentLipshitzConstantWarning)
-        return lower_bound
+        return self._bound(simplex)
 
     def _bound(self, simplex):
         raise NotImplementedError("Implement in subclass")
@@ -86,6 +78,3 @@ class OrdinaryPointBoundCalculator(PointBoundCalculator):
             bound = self.f_lipshitz_constant * distance - self._offset
         return bound
 
-
-class InconsistentLipshitzConstantWarning(UserWarning):
-    pass

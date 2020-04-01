@@ -1,10 +1,9 @@
-import warnings
 import unittest
 
 import numpy as np
 
 from globaloptimization.bound import bound
-from globaloptimization.geometry.simplex import Simplex, FunctionPoint
+from globaloptimization.geometry.simplex import Simplex
 from globaloptimization.util.util import ObjectValuePair
 from globaloptimization.geometry.tests.test_simplex import make_simplex
 
@@ -21,30 +20,8 @@ class TestBoundCalculator(unittest.TestCase):
         function_point = simplex.function_points[0]
         self.assertRaises(ValueError, bounder.bound, function_point)
 
-    def test_bound_warns_if_bound_invalid(self):
-        # We make a bounder that always returns max(f on vertices) as a
-        # bound, and check that it warns on a simplex that has f not
-        # all the same value.
-        point_bounder = bound.OrdinaryPointBoundCalculator(1e-10, 1e-10)
-        simplex_bounder = bound.MaxPointSimplexBoundCalculator(point_bounder)
 
-        simplex = Simplex((
-            FunctionPoint(np.array([0.0, 1.0]), 1.0),
-            FunctionPoint(np.array([1.0, 1.0]), 2.0),
-            FunctionPoint(np.array([1.0, 0.0]), 0.0)))
-
-        self.assertWarns(
-            bound.InconsistentLipshitzConstantWarning,
-            simplex_bounder.bound, simplex)
-
-
-class TestMaxPointSimplexBoundCalculator(unittest.TestCase):
-    def setUp(self):
-        warnings.filterwarnings('ignore')
-
-    def tearDown(self):
-        warnings.filterwarnings('default')
-
+class MaxPointSimplexBoundCalculator(unittest.TestCase):
     def test_bounds_correctly(self):
         np.random.seed(1459)
         point_bounder = bound.OrdinaryPointBoundCalculator(*np.random.randn(2))
