@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from globaloptimization.util.heap import Heap, EmptyHeapError, heapsort
+from globaloptimize.util.heap import Heap, EmptyHeapError, heapsort
 
 
 class TestHeap(unittest.TestCase):

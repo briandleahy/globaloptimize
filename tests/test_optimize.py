@@ -3,14 +3,14 @@ import unittest
 
 import numpy as np
 
-from globaloptimization.optimize import BranchBoundOptimizer
-from globaloptimization.util.heap import Heap
-from globaloptimization.geometry.simplex import Simplex, FunctionPoint
-from globaloptimization.bound.bound import (
+from globaloptimize.optimize import BranchBoundOptimizer
+from globaloptimize.util.heap import Heap
+from globaloptimize.geometry.simplex import Simplex, FunctionPoint
+from globaloptimize.bound.bound import (
     MaxPointSimplexBoundCalculator,
     OrdinaryPointBoundCalculator,
     )
-from globaloptimization.geometry.tests.test_simplex import make_simplex
+from globaloptimize.geometry.tests.test_simplex import make_simplex
 
 
 class TestBranchBoundOptimizerBasicMethods(unittest.TestCase):

@@ -2,10 +2,10 @@ import unittest
 
 import numpy as np
 
-from globaloptimization.bound import bound
-from globaloptimization.geometry.simplex import Simplex
-from globaloptimization.util.util import ObjectValuePair
-from globaloptimization.geometry.tests.test_simplex import make_simplex
+from globaloptimize.bound import bound
+from globaloptimize.geometry.simplex import Simplex
+from globaloptimize.util.util import ObjectValuePair
+from globaloptimize.geometry.tests.test_simplex import make_simplex
 
 
 class TestBoundCalculator(unittest.TestCase):

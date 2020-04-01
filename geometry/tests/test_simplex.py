@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from globaloptimization.geometry.simplex import Simplex, FunctionPoint
+from globaloptimize.geometry.simplex import Simplex, FunctionPoint
 
 
 class TestFunctionPoint(unittest.TestCase):

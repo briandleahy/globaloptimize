@@ -1,6 +1,6 @@
 import numpy as np
 
-from globaloptimization.geometry.simplex import Simplex
+from globaloptimize.geometry.simplex import Simplex
 
 
 """

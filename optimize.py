@@ -1,8 +1,8 @@
 import numpy as np
 
-from globaloptimization.util.heap import Heap
-from globaloptimization.util.util import ObjectValuePair
-from globaloptimization.geometry.simplex import Simplex, FunctionPoint
+from globaloptimize.util.heap import Heap
+from globaloptimize.util.util import ObjectValuePair
+from globaloptimize.geometry.simplex import Simplex, FunctionPoint
 
 
 # TODO:

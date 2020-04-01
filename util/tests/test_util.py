@@ -4,9 +4,9 @@ import unittest
 
 import numpy as np
 
-from globaloptimization.util.util import ObjectValuePair
-from globaloptimization.util.heap import heapsort
-from globaloptimization.geometry.simplex import Simplex, FunctionPoint
+from globaloptimize.util.util import ObjectValuePair
+from globaloptimize.util.heap import heapsort
+from globaloptimize.geometry.simplex import Simplex, FunctionPoint
 
 
 class TestObjectValuePair(unittest.TestCase):
