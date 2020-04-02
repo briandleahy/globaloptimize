@@ -1,0 +1,25 @@
+Add system tests with real optimization functions.
+
+
+Then there are some random TODO's littered throughout the codebase.
+* Create a way to go from an initial collection of points to a triangulation.
+* Implement the tighter bounds for regions near a local minimum.
+* Call local minimizers "when appropriate".
+* other bounding methods
+    * min(f) - h(radius of circumscribing sphere)
+    * min(f) - h(max(distance from simplex center to all vertices))
+  but you have to do some proofs for this latter one, that this distance
+  is an upper bound on the min max distance.
+* speed: Lazily precompute simplex.min, simplex.max
+* hashable function points
+* a way to look up which simplices a FunctionPoint is in. This is tricky
+  because a dictionary-like LUT will keep references to simplices after
+  they are deleted. You could manually remove them on removing a simplex.
+  Im a bit worried about RAM though. Do this later.
+* functionality for branching on either
+    * longest edge
+    * longest edge from min vertex
+  These would be only for different bounding methods.
+* return a more detailed return type from optimize (scipy OptimizeResult)
+
+Finally, wrap this with a scipy-optimize-like function.
