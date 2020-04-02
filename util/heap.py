@@ -2,9 +2,40 @@ from collections import deque
 
 
 class Heap(object):
-    # FIXME add a docstring!
+    """
+    A data structure which efficiently keeps the min value at the top.
+
+    Both adding an object to the heap and popping the minimum object
+    from the heap take O(log(N)) operations.
+
+    Methods
+    -------
+    create_from_iterable: iterable -> Heap
+    add_to_heap
+        Add a`
+    pop_min:
+        Remove and return the minimum element from the heap.
+
+    Raises
+    ------
+    EmptyHeapError
+        Raised when pop_min() is called on an empty heap.
+
+    See Also
+    --------
+    heapsort
+        Uses a Heap structure to sort items in O(N log(N)) time.
+    """
 
     def __init__(self, value=None):
+        """
+        Parameters
+        ----------
+        value : comparison-sortable object or None, optional
+            The first value to add to the heap. If None, the heap is
+            initialized empty. If not None, `value` must be comparable
+            to the other objects in the heap with >, <, >=, <=, and ==.
+        """
         self.value = value
         self.num_in_heap = 0 if value is None else 1
         self.left_child = None
@@ -20,6 +51,13 @@ class Heap(object):
         return heap
 
     def add_to_heap(self, value):
+        """
+        Parameters
+        ----------
+        value : comparison-sortable object
+            `value` must be comparable to the other objects in the heap
+            with >, <, >=, <=, and ==.
+        """
         if self.value is None:
             self.value = value
         elif value < self.value:
