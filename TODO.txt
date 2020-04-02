@@ -2,7 +2,6 @@ Add system tests with real optimization functions.
 
 
 Then there are some random TODO's littered throughout the codebase.
-* Create a way to go from an initial collection of points to a triangulation.
 * Implement the tighter bounds for regions near a local minimum.
 * Call local minimizers "when appropriate".
 * other bounding methods
