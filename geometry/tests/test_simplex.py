@@ -2,8 +2,7 @@ import unittest
 
 import numpy as np
 
-from globaloptimize.geometry.simplex import (
-    Simplex, FunctionPoint, triangulate_function_points_into_simplices)
+from globaloptimize.geometry.simplex import Simplex, FunctionPoint
 
 
 class TestFunctionPoint(unittest.TestCase):
@@ -126,36 +125,6 @@ class TestSimplex(unittest.TestCase):
 
         min_function_point = simplex.vertex_with_min_value
         self.assertEqual(min_function_point.value, values.min())
-
-
-class TestMisc(unittest.TestCase):
-    def test_triangulate_function_points_returns_simplices(self):
-        np.random.seed(1400)
-        npoints = 25
-        ndim = 5
-        points = np.random.randn(npoints, ndim)
-        values = np.random.randn(npoints)
-        function_points = make_function_points(points, values)
-
-        simplices = triangulate_function_points_into_simplices(function_points)
-        for simplex in simplices:
-            self.assertIsInstance(simplex, Simplex)
-
-    def test_triangulate_function_points_uses_all_points(self):
-        np.random.seed(1400)
-        npoints = 25
-        ndim = 5
-        points = np.random.randn(npoints, ndim)
-        values = np.random.randn(npoints)
-        function_points = make_function_points(points, values)
-
-        simplices = triangulate_function_points_into_simplices(function_points)
-
-        for function_point in function_points:
-            point_in_simplex_i = [
-                function_point in s.function_points
-                for s in simplices]
-            self.assertTrue(any(point_in_simplex_i))
 
 
 def make_function_points(points, values):

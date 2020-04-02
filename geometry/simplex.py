@@ -1,7 +1,6 @@
 from collections import namedtuple
 
 import numpy as np
-from scipy.spatial import Delaunay
 
 
 # TODO: Some premature optimizations that are the root of all evil:
@@ -94,14 +93,4 @@ class Simplex(object):
     def vertex_with_min_value(self):
         index = np.argmin([fp.value for fp in self.function_points])
         return self.function_points[index]
-
-
-def triangulate_function_points_into_simplices(function_points):
-    points = [fp.point for fp in function_points]
-    triangulation = Delaunay(np.asarray(points))
-    simplices = []
-    for indices in triangulation.simplices:
-        these_points = [function_points[i] for i in indices]
-        simplices.append(Simplex(these_points))
-    return simplices
 
