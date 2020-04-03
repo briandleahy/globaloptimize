@@ -10,7 +10,6 @@ Then there are some random TODO's littered throughout the codebase.
   but you have to do some proofs for this latter one, that this distance
   is an upper bound on the min max distance.
 * speed: Lazily precompute simplex.min, simplex.max
-* hashable function points
 * a way to look up which simplices a FunctionPoint is in. This is tricky
   because a dictionary-like LUT will keep references to simplices after
   they are deleted. You could manually remove them on removing a simplex.
