@@ -30,8 +30,18 @@ class FunctionPoint(object):
     def is_local_minimum(self):
         return self._tuple[2]
 
+    @property
+    def _data(self):
+        return tuple(self.point) + (self.value,)
+
     def __repr__(self):
         return "FunctionPoint({}, {})".format(self.point, self.value)
+
+    def __hash__(self):
+        return hash(self._data)
+
+    def __eq__(self, other):
+        return self._data == other._data
 
 
 class Simplex(object):

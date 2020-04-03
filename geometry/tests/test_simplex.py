@@ -39,6 +39,32 @@ class TestFunctionPoint(unittest.TestCase):
         self.assertIn('1', the_repr)
         self.assertIn(', 3.5)', the_repr)
 
+    def test_eq_for_same_point(self):
+        args = (np.ones(4), 3.5)
+        f1 = FunctionPoint(*args)
+        f2 = FunctionPoint(*args)
+        self.assertEqual(f1, f2)
+
+    def test_eq_for_different_point(self):
+        f1 = FunctionPoint(np.ones(4), 3.5)
+        f2 = FunctionPoint(np.zeros(4), 3.5)
+        self.assertNotEqual(f1, f2)
+
+    def test_hash_is_different_for_different_points(self):
+        f1 = FunctionPoint(np.ones(4), 3.5)
+        f2 = FunctionPoint(np.zeros(4), 3.5)
+        hash1 = hash(f1)
+        hash2 = hash(f2)
+        self.assertNotEqual(hash1, hash2)
+
+    def test_hash_is_same_for_same_point(self):
+        args = (np.ones(4), 3.5)
+        f1 = FunctionPoint(*args)
+        f2 = FunctionPoint(*args)
+        hash1 = hash(f1)
+        hash2 = hash(f2)
+        self.assertEqual(hash1, hash2)
+
 
 class TestSimplex(unittest.TestCase):
     def test_raises_error_if_points_not_all_same_dimension(self):
