@@ -5,16 +5,10 @@ import numpy as np
 
 # TODO: Some premature optimizations that are the root of all evil:
 # lazily precompute simplex.min, simplex.max
-# hashable FunctionPoints
 
 
-"""
-FunctionPoint = namedtuple(
-    "FunctionPoint",
-    ('point', 'value', 'is_local_minimum'),
-    defaults=(False,))  # defaults is not added until 3.7
-"""
 class FunctionPoint(object):
+    """Essentially a namedtuple"""
     def __init__(self, point, value, is_local_minimum=False):
         self._tuple = (point, value, is_local_minimum)
 
